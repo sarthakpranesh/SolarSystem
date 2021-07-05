@@ -48,6 +48,7 @@ const spaceBodies = [];
 // sun
 const sunProps = {
     radius: 696340/offsets.radius,
+    spin: 119.82/offsets.spin,
 }
 const sun = new SpaceBody(sunProps.radius, 32, -0.004, 0, { map: sunTexture });
 scene.add(sun.orbit);
@@ -64,7 +65,7 @@ scene.add(light);
 // mercury - all other planets follow the same prop definitions 
 const mercuryProps = {
     radius: 2439.7/offsets.radius, // actual size of mercury in km divided by offset
-    spin: -10.83/offsets.spin, // actual speed of mercury in km/h divided by offset and negative because almost all spin counter-clockwise
+    spin: -10.83/offsets.spin, // actual spin speed of mercury in km/h divided by offset and negative because almost all spin counter-clockwise
     orbitRotation: 47.36/offsets.orbitRotation, // actual mean orbit velocity in km/s divided by offset and relevant sign to say about direction or rotation
     distanceFromSun: 57900000/offsets.distanceOffset, // actual distance of mercury from sun in km divided by offset
 }
