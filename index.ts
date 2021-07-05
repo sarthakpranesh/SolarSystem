@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import {PointLight} from 'three';
+import {PointLight, Vector3} from 'three';
 import {OrbitControls} from './src/lib/OrbitControls.js';
-import SpaceBody from './src/components/SpaceBody';
+import SpaceBody, {SpaceBodyParams} from './src/components/SpaceBody';
 
 // loading images
 const s = require('./assets/texture/sun.jpg');
@@ -46,11 +46,16 @@ const offsets = {
 const spaceBodies = [];
 
 // sun
-const sunProps = {
+const sunProps: SpaceBodyParams = {
     radius: 696340/offsets.radius,
     spin: 119.82/offsets.spin,
+    orbitRotation: 0,
+    meshMaterial: {
+        map: sunTexture,
+    },
+    initPosition: new Vector3(),
 }
-const sun = new SpaceBody(sunProps.radius, 32, -0.004, 0, { map: sunTexture });
+const sun = new SpaceBody(sunProps);
 scene.add(sun.orbit);
 spaceBodies.push(sun);
 // add sunlight
@@ -63,151 +68,144 @@ light.position.set(100, 0, 0);
 scene.add(light);
 
 // mercury - all other planets follow the same prop definitions 
-const mercuryProps = {
+const mercuryProps: SpaceBodyParams = {
     radius: 2439.7/offsets.radius, // actual size of mercury in km divided by offset
     spin: -10.83/offsets.spin, // actual spin speed of mercury in km/h divided by offset and negative because almost all spin counter-clockwise
     orbitRotation: 47.36/offsets.orbitRotation, // actual mean orbit velocity in km/s divided by offset and relevant sign to say about direction or rotation
-    distanceFromSun: 57900000/offsets.distanceOffset, // actual distance of mercury from sun in km divided by offset
+    meshMaterial: {
+        map: mercuryTexture,
+    }, // close to actual texture - taken from online resources
+    initPosition: new Vector3(
+        57900000/offsets.distanceOffset
+    ), // actual distance of mercury from sun in km divided by offset
 }
-const mercury = new SpaceBody(
-    mercuryProps.radius,
-    32,
-    mercuryProps.spin,
-    mercuryProps.orbitRotation,
-    { map: mercuryTexture },
-    { x: mercuryProps.distanceFromSun }
-);
+const mercury = new SpaceBody(mercuryProps);
 scene.add(mercury.orbit);
 spaceBodies.push(mercury);
 
 // venus
-const venusProps = {
+const venusProps: SpaceBodyParams = {
     radius: 6051.8/offsets.radius,
     spin: -6.52/offsets.spin,
     orbitRotation: 35.02/offsets.orbitRotation,
-    distanceFromSun: 108200000/offsets.distanceOffset,
+    meshMaterial: {
+        map: venusTexture,
+    },
+    initPosition: new Vector3(
+        108200000/offsets.distanceOffset,
+    ),
 }
-const venus = new SpaceBody(
-    venusProps.radius,
-    32,
-    venusProps.spin,
-    venusProps.orbitRotation,
-    { map: venusTexture },
-    { x: venusProps.distanceFromSun }
-);
+const venus = new SpaceBody(venusProps);
 scene.add(venus.orbit);
 spaceBodies.push(venus);
 
 // earth
-const earthProps = {
+const earthProps: SpaceBodyParams = {
     radius: 6378.1/offsets.radius,
     spin: -1674/offsets.spin,
     orbitRotation: 29.78/offsets.orbitRotation,
-    distanceFromSun: 149600000/offsets.distanceOffset,
+    meshMaterial: {
+        map: earthTexture,
+    },
+    initPosition: new Vector3(
+        149600000/offsets.distanceOffset,
+    ),
 }
-const earth = new SpaceBody(
-    earthProps.radius,
-    32,
-    earthProps.spin,
-    earthProps.orbitRotation,
-    { map: earthTexture },
-    { x: earthProps.distanceFromSun }
-);
+const earth = new SpaceBody(earthProps);
 scene.add(earth.orbit);
 spaceBodies.push(earth);
-const moonProps = {
-    radius: 1738.1/offsets.radius
+const moonProps: SpaceBodyParams = {
+    radius: 1738.1/offsets.radius,
+    spin: -0.002,
+    orbitRotation: 0.004,
+    meshMaterial: {
+        map: moonTexture,
+    },
+    initPosition: new Vector3(
+        20,
+    )
 }
-const moon = new SpaceBody(moonProps.radius, 32, -0.002, 0.004, { map: moonTexture }, { x: 20 });
+const moon = new SpaceBody(moonProps);
 earth.body.add(moon.orbit);
 spaceBodies.push(moon);
 
 // mars
-const marsProps = {
+const marsProps: SpaceBodyParams = {
     radius: 3396.2/offsets.radius,
     spin: -866/offsets.spin,
     orbitRotation: 24/offsets.orbitRotation,
-    distanceFromSun: 227900000/offsets.distanceOffset,
+    meshMaterial: {
+        map: marsTexture,
+    },
+    initPosition: new Vector3(
+        227900000/offsets.distanceOffset,
+    ),
 }
-const mars = new SpaceBody(
-    marsProps.radius,
-    32,
-    marsProps.spin,
-    marsProps.orbitRotation,
-    { map: marsTexture },
-    { x: marsProps.distanceFromSun }
-);
+const mars = new SpaceBody(marsProps);
 scene.add(mars.orbit);
 spaceBodies.push(mars);
 
 // jupiter
-const jupiterProps = {
+const jupiterProps: SpaceBodyParams = {
     radius: 71492/offsets.radius,
     spin: -45583/offsets.spin,
     orbitRotation: 13.07/offsets.orbitRotation,
-    distanceFromSun: 778600000/offsets.distanceOffset
+    meshMaterial: {
+        map: jupiterTexture,
+    },
+    initPosition: new Vector3(
+        778600000/offsets.distanceOffset,
+    ),
 }
-const jupiter = new SpaceBody(
-    jupiterProps.radius,
-    32,
-    jupiterProps.spin,
-    jupiterProps.orbitRotation,
-    { map: jupiterTexture },
-    { x: jupiterProps.distanceFromSun }
-);
+const jupiter = new SpaceBody(jupiterProps);
 scene.add(jupiter.orbit);
 spaceBodies.push(jupiter);
 
 // saturn
-const saturnProps = {
+const saturnProps: SpaceBodyParams = {
     radius: 60268/offsets.radius,
     spin: -36840/offsets.spin,
     orbitRotation: 9.68/offsets.orbitRotation,
-    distanceFromSun: 1433500000/offsets.distanceOffset
+    meshMaterial: {
+        map: saturnTexture,
+    },
+    initPosition: new Vector3(
+        1433500000/offsets.distanceOffset,
+    ),
 }
-const saturn = new SpaceBody(
-    saturnProps.radius,
-    32,
-    saturnProps.spin,
-    saturnProps.orbitRotation,
-    { map: saturnTexture },
-    { x: saturnProps.distanceFromSun }
-);
+const saturn = new SpaceBody(saturnProps);
 scene.add(saturn.orbit);
 spaceBodies.push(saturn);
 
 // uranus
-const uranusProps = {
+const uranusProps: SpaceBodyParams = {
     radius: 25559/offsets.radius,
     spin: -14794/offsets.spin,
     orbitRotation: 6.8/offsets.orbitRotation,
-    distanceFromSun: 2872500000/offsets.distanceOffset
+    meshMaterial: {
+        map: uranusTexture,
+    },
+    initPosition: new Vector3(
+        2872500000/offsets.distanceOffset,
+    ),
 }
-const uranus = new SpaceBody(
-    uranusProps.radius,
-    32,
-    uranusProps.spin,
-    uranusProps.orbitRotation,
-    { map: uranusTexture },
-    { x: uranusProps.distanceFromSun }
-);
+const uranus = new SpaceBody(uranusProps);
 scene.add(uranus.orbit);
 spaceBodies.push(uranus);
 
 // neptune
-const neptuneProps = {
+const neptuneProps:SpaceBodyParams = {
     radius: 24764/offsets.radius,
     spin: -9719/offsets.spin,
     orbitRotation: 5.43/offsets.orbitRotation,
-    distanceFromSun: 4495100000/offsets.distanceOffset
+    meshMaterial: {
+        map: neptuneTexture,
+    },
+    initPosition: new Vector3(
+        4495100000/offsets.distanceOffset,
+    ),
 }
-const neptune = new SpaceBody(
-    neptuneProps.radius, 32,
-    neptuneProps.spin,
-    neptuneProps.orbitRotation,
-    { map: neptuneTexture },
-    { x: neptuneProps.distanceFromSun }
-);
+const neptune = new SpaceBody(neptuneProps);
 scene.add(neptune.orbit);
 spaceBodies.push(neptune);
 
@@ -242,10 +240,8 @@ const planetNames = ['sun', 'mercury', 'venus', 'earth', 'mars', 'jupiter', 'sat
     neptune
 ].forEach((planet, index) => {
     const selectPlanet = () => {
-        // orbitController.target = planet.body.position;
-        // orbitController.update()
         planet.body.add(camera);
-        camera.position.z = 100;
+        camera.position.z = planet.radius*8;
     }
     const a = document.createElement('a');
     a.onclick = selectPlanet;
